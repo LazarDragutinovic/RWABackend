@@ -1,7 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcrypt"
+import { jwtConstants } from 'src/constants';
 import { KorisnikDto } from 'src/dtos/korisnik.dto';
 import { KorisnikService } from 'src/korisnik/korisnik/korisnik.service';
+import { TokenPayload } from '../tokenPayload';
 
 enum PostgresErrorCode {
     UniqueViolation = '23505'
@@ -10,7 +13,7 @@ enum PostgresErrorCode {
 @Injectable()
 export class AutenService {
 
-    constructor(private readonly korisnikService: KorisnikService) {
+    constructor(private readonly korisnikService: KorisnikService,private readonly jwtService: JwtService) {
 
     }
 
@@ -48,4 +51,15 @@ export class AutenService {
         }
       }
 
+
+    public KolacicSaJwtTokenon(korisnikId: number) {
+        const TokenPayload: TokenPayload = {userId:korisnikId}
+        
+        const token= this.jwtService.sign(TokenPayload)
+        return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${jwtConstants.expiration}`;
+    }
+
+    public kolacicZaLogOut() {
+        return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+      }
 }

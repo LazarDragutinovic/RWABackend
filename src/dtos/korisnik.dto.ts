@@ -10,6 +10,7 @@ export class KorisnikDto {
         this.prezime = korisnik.prezime;
         this.email = korisnik.email;
         this.lozinka = korisnik.lozinka;
+        this.brojTelefona = korisnik.brojTelefona
     }
 
     ime: string
@@ -21,4 +22,6 @@ export class KorisnikDto {
     email: string
 
     lozinka: string
+
+    brojTelefona: string
 }

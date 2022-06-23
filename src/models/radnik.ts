@@ -38,6 +38,9 @@ export class Radnik {
     })
     email: string
 
+    @Column()
+    lozinka:string
+
     @Column({
         type:"simple-enum",
         enum:Pozicija

@@ -12,6 +12,7 @@ export class RadnikDto {
         this.ime = radnik.ime;
         this.prezime = radnik.prezime;
         this.email = radnik.email
+        this.lozinka = radnik.lozinka
         this.pozicija = radnik.pozicija
     }
     id: number
@@ -24,6 +25,6 @@ export class RadnikDto {
     
     email: string
 
-   
+   lozinka:string
     pozicija: Pozicija
 }

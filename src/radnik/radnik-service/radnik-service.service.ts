@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RadnikDto } from 'src/dtos/radnik-dto';
 import { Radnik } from 'src/models/radnik';
@@ -28,5 +28,27 @@ export class RadnikServiceService {
         radnik = await this.radnikRepository.save(radnik);
 
         return new RadnikDto(radnik);
+    }
+
+    async preuzmiPrekoEmaila(email: string) {
+        const radnik = await this.radnikRepository.findOne({where:{ email} });
+        if (radnik) {
+          return radnik;
+        }
+        throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
+      }
+     
+      async kreiraj(radnikDto: RadnikDto) {
+        const noviRadnik = await this.radnikRepository.create(radnikDto);
+        await this.radnikRepository.save(noviRadnik);
+        return noviRadnik;
+      }
+
+    async preuzmiPrekoId(id: number) {
+        let radnik = await this.radnikRepository.findOne({where: {id}})
+        if (radnik) {
+            return radnik;
+        }
+        throw new HttpException('Korisnik sa ovim idem ne postoji', HttpStatus.NOT_FOUND);
     }
 }
