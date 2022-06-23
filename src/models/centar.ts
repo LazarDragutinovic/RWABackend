@@ -21,6 +21,9 @@ export class Centar {
     adresa: string;
 
     @Column()
+    grad: string
+
+    @Column()
     telefon: string;
 
 

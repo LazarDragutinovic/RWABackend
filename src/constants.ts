@@ -1,5 +1,5 @@
 export const jwtConstants = {
     secret: 'tajniKljuc',
     secretRadnik:"tajniKljucRadnik",
-    expiration: 60
+    expiration: 600
   };
