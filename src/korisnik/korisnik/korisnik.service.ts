@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { KorisnikDto } from 'src/dtos/korisnik.dto';
 import { Korisnik } from 'src/models/korisnik';
 import { PromeniLozinkuParametri } from 'src/parametri/promeniLozinkuParametri';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as bcrypt from "bcrypt"
 @Injectable()
 export class KorisnikService {
@@ -43,5 +43,13 @@ export class KorisnikService {
             await this.korisnikRepository.save(korisnik);
         }
         else throw new HttpException("Netacna stara lozinka.",HttpStatus.UNAUTHORIZED)
+    }
+
+    async PretraziKorisnike(jmbg:number) {
+        
+        let korisnici = await this.korisnikRepository.createQueryBuilder("korisnik")
+                        .where("korisnik.jmbg like :jmbg",{jmbg: `%${jmbg}%`})
+                        .getMany();
+        return korisnici;
     }
 }

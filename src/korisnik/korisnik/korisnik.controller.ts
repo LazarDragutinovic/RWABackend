@@ -1,4 +1,5 @@
-import { Body, Controller, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import JwtAuthenticationGuardRadnik from 'src/autentifikacija-radnik/jwtAuth.guard';
 import JwtAuthenticationGuard from 'src/autentifikacija/jwtauth.guard';
 import { PromeniLozinkuParametri } from 'src/parametri/promeniLozinkuParametri';
 import { KorisnikService } from './korisnik.service';
@@ -16,5 +17,13 @@ export class KorisnikController {
         
 
         
+    }
+
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("PretraziKorisnike/:jmbg")
+    pretraziKorisnike(@Param() {jmbg}) {
+
+        return this.korisnikService.PretraziKorisnike(jmbg);
+
     }
 }

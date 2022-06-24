@@ -47,6 +47,11 @@ export class Radnik {
     })
     pozicija: Pozicija
 
+    @Column({
+        nullable:true
+    })
+    odobren: boolean
+
     @OneToMany((type)=>Popravka,(popravka)=>popravka.mehanicar,{cascade:true, onDelete:"SET NULL"})
     popravke: Popravka[]
 

@@ -11,9 +11,12 @@ import { AutentifikacijaRadnikModule } from './autentifikacija-radnik/autentifik
 import { CentarModule } from './centar/centar.module';
 import { VoziloLogickoModule } from './vozilo-logicko/vozilo-logicko.module';
 import { LikeModule } from './like/like.module';
+import { IznajmljivanjeModule } from './iznajmljivanje/iznajmljivanje.module';
+import { PopravkaModule } from './popravka/popravka.module';
+import { OdobriRasporediModule } from './odobri-rasporedi/odobri-rasporedi.module';
 
 @Module({
-  imports: [RadnikModule,TypeOrmModule.forRoot(typeOrmConnectionOptions), KorisnikModule, AutentifikacijaModule, VoziloModule, AutentifikacijaRadnikModule, CentarModule, VoziloLogickoModule, LikeModule],
+  imports: [RadnikModule,TypeOrmModule.forRoot(typeOrmConnectionOptions), KorisnikModule, AutentifikacijaModule, VoziloModule, AutentifikacijaRadnikModule, CentarModule, VoziloLogickoModule, LikeModule, IznajmljivanjeModule, PopravkaModule, OdobriRasporediModule],
   controllers: [AppController],
   providers: [AppService],
 })

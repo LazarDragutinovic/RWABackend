@@ -15,6 +15,9 @@ export class Iznajmljivanje {
     datum: Date
 
     @Column()
+    zavrseno:boolean
+
+    @Column()
     dana:number
 
     @ManyToOne(type=>Radnik, radnik=>radnik.iznajmljivanja)

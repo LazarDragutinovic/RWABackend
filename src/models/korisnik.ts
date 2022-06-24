@@ -31,6 +31,12 @@ export class Korisnik {
     @Column()
     lozinka: string
 
+    @Column({
+        unique:true,
+        nullable:true
+    })
+    jmbg: string
+
     @Column()
     brojTelefona: string
 

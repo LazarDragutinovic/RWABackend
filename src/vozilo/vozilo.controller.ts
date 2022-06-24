@@ -35,4 +35,6 @@ export class VoziloController {
     dodajVozilo(@Body() voziloDto : VoziloDto){
         return this.voziloService.dodajVozilo(voziloDto);
     }
+
+    
 }
