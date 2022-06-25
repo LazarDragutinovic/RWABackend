@@ -12,6 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt-Radnik') {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
+        console.log(request.cookies.Authentication)
         return request?.cookies?.Authentication;
       }]),
       secretOrKey: jwtConstants.secretRadnik

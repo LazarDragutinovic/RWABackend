@@ -17,6 +17,7 @@ export class IznajmljivanjeService {
     ){}
 
     async preuzmiIznajmljivanjaKorisnika(id: number) {
+        console.log(id)
         let korisnik = await this.korisnikRepository.findOne({where:{id},relations:["iznajmljivanja"]});
         if(!korisnik) throw new HttpException("Nema tog korisnika",HttpStatus.NOT_FOUND);
         let iznajmljivanja = [];

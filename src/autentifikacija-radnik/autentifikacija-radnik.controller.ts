@@ -26,17 +26,18 @@ export class AutentifikacijaRadnikController {
         const radnik = <Radnik>request.user;
         let kolacic = this.autentRadnikService.JwtToken(radnik.id);
         response.setHeader("Set-Cookie",kolacic);
-        console.log(response.headersSent)
         radnik.lozinka = undefined;
-        response.sendStatus(HttpStatus.OK)
-        return response.send(radnik);
+        //response.send(radnik);
+        response.send(radnik)
       }
 
       @UseGuards(JwtAuthenticationGuardRadnik)
       @Post('log-out')
       async logOut(@Req() request: RequestSaRadnikom, @Res() response: Response) {
+        console.log(response)
         response.setHeader('Set-Cookie', this.autentRadnikService.preuzmiKolacicZaLogOut());
-        return response.sendStatus(200);
+        response.sendStatus(HttpStatus.OK);
+        return response
       }
 
       @UseGuards(JwtAuthenticationGuardRadnik)

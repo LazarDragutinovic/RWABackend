@@ -17,8 +17,8 @@ export class IznajmljivanjeController {
 
     @UseGuards(JwtAuthenticationGuardRadnik)
     @Get("preuzmiIznajmljivanjaKorisnikaRadnik/:id")
-    preuzmiIznajmljivanjaRadnik(@Param("id",ParseIntPipe) id: number){
-        return this.iznajmljivanjeServic.preuzmiIznajmljivanjaKorisnika(id);
+    async preuzmiIznajmljivanjaRadnik(@Param("id",ParseIntPipe) id: number){
+        return await this.iznajmljivanjeServic.preuzmiIznajmljivanjaKorisnika(id);
     }
 
     @UseGuards(JwtAuthenticationGuardRadnik)

@@ -38,7 +38,6 @@ export class AutenController {
     async logOut(@Req() request: RequestSaKorisnikom, @Res() response: Response) {
         response.setHeader('Set-Cookie', this.autenService.kolacicZaLogOut());
         response.sendStatus(HttpStatus.OK);
-        response.send({message:"uspesno izlogovan"})
         return response;
     }
 
