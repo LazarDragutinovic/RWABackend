@@ -13,6 +13,13 @@ export class LikeService {
                 @InjectRepository(Vozilo) private voziloRepository: Repository<Vozilo>
     ){}
 
+
+    async likeKorisnika(idk: number,idv:number){
+        let like = await this.likeRepository.findOne({where:{korisnik:{id:idk},vozilo:{id:idv}}})
+        if(!like) return -1;
+        return like.id;
+    }
+
     async like(idKorisnik: number, idVozilo: number) {
         let like = await this.likeRepository.findOne({where:{vozilo:{id: idVozilo}, korisnik: {id: idKorisnik}}})
         if( like !== null ) throw new HttpException("Vec postoji like.",HttpStatus.UNAUTHORIZED)
