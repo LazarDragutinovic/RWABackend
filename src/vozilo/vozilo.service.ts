@@ -5,7 +5,7 @@ import { Iznajmljivanje } from 'src/models/iznajmljivanje';
 import { Korisnik } from 'src/models/korisnik';
 import { Vozilo } from 'src/models/vozilo';
 import { VoziloLogicko } from 'src/models/voziloLogicko';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class VoziloService {
@@ -17,12 +17,16 @@ export class VoziloService {
                 ) {}
 
     preuzmiSvaVozila() {
-        return this.voziloRepository.find();
+        return this.voziloRepository.find({relations:["voziloLogicko","slike","centar"]});
     }
 
-    pretraziAutomobile(grad: string, proizvodjac: string,strana: number) {
-        let vozila = this.voziloRepository.find({where:{voziloLogicko: {proizvodjac} , centar: {grad}}});
-
+    async pretraziAutomobile(grad: string, proizvodjac: string,strana: number) {
+        
+        let vozila = await this.voziloRepository.find({where:{voziloLogicko: {proizvodjac: Like(`%${proizvodjac.toUpperCase()}%`)} , centar: {grad:Like(`%${grad}%`)}},relations:["voziloLogicko","slike","centar"]});
+        // let vozila1= await this.voziloLogickoRepository.createQueryBuilder("vozilo")
+        //                         .where("vozilo.voziloLogicko.proizvodjac like :proizvodjac and vozilo.centar.grad like :grad", {proizvodjac: `%${proizvodjac}%`, grad: `%${grad}%`})
+        //                         .getMany()
+        
         return vozila;
     }
 

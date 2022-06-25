@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
+        console.log(request?.cookies?.Authentication)
         return request?.cookies?.Authentication;
       }]),
       secretOrKey: jwtConstants.secret
@@ -20,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
  
   async validate(payload: TokenPayload) {
-    
     return this.korisnikService.preuzmiPrekoId(payload.userId);
   }
 }

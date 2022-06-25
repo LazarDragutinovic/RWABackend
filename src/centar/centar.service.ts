@@ -10,8 +10,8 @@ export class CentarService {
 
     constructor(@InjectRepository(Centar) private centarRepository: Repository<Centar>){}
 
-    async preuzmiCentre() {
-        return await this.centarRepository.find();
+    async preuzmiCentre() {          
+        return await this.centarRepository.find({relations:["slika"]});
     }
 
     async dodajCentar(centarDto: CentarDto) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { RadnikDto } from 'src/dtos/radnik-dto';
 import { Radnik } from 'src/models/radnik';
 import { AutentifikacijaRadnikService } from './autentifikacija-radnik.service';
@@ -26,7 +26,9 @@ export class AutentifikacijaRadnikController {
         const radnik = <Radnik>request.user;
         let kolacic = this.autentRadnikService.JwtToken(radnik.id);
         response.setHeader("Set-Cookie",kolacic);
+        console.log(response.headersSent)
         radnik.lozinka = undefined;
+        response.sendStatus(HttpStatus.OK)
         return response.send(radnik);
       }
 

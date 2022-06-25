@@ -14,9 +14,10 @@ import { LikeModule } from './like/like.module';
 import { IznajmljivanjeModule } from './iznajmljivanje/iznajmljivanje.module';
 import { PopravkaModule } from './popravka/popravka.module';
 import { OdobriRasporediModule } from './odobri-rasporedi/odobri-rasporedi.module';
+import { SastanakModule } from './sastanak/sastanak.module';
 
 @Module({
-  imports: [RadnikModule,TypeOrmModule.forRoot(typeOrmConnectionOptions), KorisnikModule, AutentifikacijaModule, VoziloModule, AutentifikacijaRadnikModule, CentarModule, VoziloLogickoModule, LikeModule, IznajmljivanjeModule, PopravkaModule, OdobriRasporediModule],
+  imports: [RadnikModule,TypeOrmModule.forRoot(typeOrmConnectionOptions), KorisnikModule, AutentifikacijaModule, VoziloModule, AutentifikacijaRadnikModule, CentarModule, VoziloLogickoModule, LikeModule, IznajmljivanjeModule, PopravkaModule, OdobriRasporediModule, SastanakModule],
   controllers: [AppController],
   providers: [AppService],
 })

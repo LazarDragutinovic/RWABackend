@@ -18,6 +18,9 @@ export class Sastanak {
     id: number
 
     @Column()
+    tema: string
+
+    @Column()
     mesto: string
 
     @Column()

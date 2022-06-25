@@ -26,8 +26,8 @@ export class AutenController {
         const korisnik = <Korisnik>request.user;
         
         const cookie = this.autenService.KolacicSaJwtTokenon(korisnik.id);
-        console.log(cookie)
         response.setHeader('Set-Cookie', cookie)
+        
         korisnik.lozinka = undefined;
         
         return response.send(korisnik);
@@ -38,6 +38,7 @@ export class AutenController {
     async logOut(@Req() request: RequestSaKorisnikom, @Res() response: Response) {
         response.setHeader('Set-Cookie', this.autenService.kolacicZaLogOut());
         response.sendStatus(HttpStatus.OK);
+        response.send({message:"uspesno izlogovan"})
         return response;
     }
 
@@ -46,7 +47,7 @@ export class AutenController {
     @UseGuards(JwtAuthenticationGuard)
     @Get()
     autentifikuj(@Req() req:RequestSaKorisnikom) {
-        const korisnik = req.korisnik;
+        const korisnik = <Korisnik>req.user;
         korisnik.lozinka = undefined;
         return korisnik
     }
