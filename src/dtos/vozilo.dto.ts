@@ -11,6 +11,7 @@ export class VoziloDto {
         this.cenaPoDanu = vozilo.cenaPoDanu;
         this.idLogickogVozila = vozilo.voziloLogicko.id
         if(vozilo.slike!== undefined)this.slike=vozilo.slike  
+        
     }
 
     id: number;

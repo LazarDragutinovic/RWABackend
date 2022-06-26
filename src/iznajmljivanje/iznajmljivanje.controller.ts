@@ -43,7 +43,7 @@ export class IznajmljivanjeController {
     @UseGuards(JwtAuthenticationGuardRadnik)
     @Put("Zavrsi/:id")
     zavrsi(@Param("id",ParseIntPipe) id: number) {
-         this.iznajmljivanjeServic.izbirisIznajmljivanje(id);
+         this.iznajmljivanjeServic.zavrsiIznajmljivanje(id);
     }  
 
 

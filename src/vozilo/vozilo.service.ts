@@ -21,13 +21,33 @@ export class VoziloService {
     }
 
     async pretraziAutomobile(grad: string, proizvodjac: string,strana: number) {
-        
+        if(grad == "1") grad = ""
         let vozila = await this.voziloRepository.find({where:{voziloLogicko: {proizvodjac: Like(`%${proizvodjac.toUpperCase()}%`)} , centar: {grad:Like(`%${grad}%`)}},relations:["voziloLogicko","slike","centar"]});
         // let vozila1= await this.voziloLogickoRepository.createQueryBuilder("vozilo")
         //                         .where("vozilo.voziloLogicko.proizvodjac like :proizvodjac and vozilo.centar.grad like :grad", {proizvodjac: `%${proizvodjac}%`, grad: `%${grad}%`})
         //                         .getMany()
         
         return vozila;
+    }
+
+    async pretraziSlobodneAutomobile(grad: string,proizvodjac:string) {
+        if(grad=="1") grad = ""
+        let vozila = await this.voziloRepository.find({where:{voziloLogicko:{proizvodjac: Like(`%${proizvodjac.toUpperCase()}%`)},centar: {grad:Like(`%${grad}%`)}},relations:["voziloLogicko","slike","centar","iznajmljivanja"]})
+        let slobodna:Vozilo[] = []
+        vozila.forEach(v=>{
+            if(v.iznajmljivanja.length ==0) slobodna.push(v)
+            else {
+                let slobodno = true;
+                for(let i = 0; i< v.iznajmljivanja.length;i++){
+                    if(!v.iznajmljivanja[i].zavrseno) {
+                        slobodno = false;
+                        break;
+                    }
+                }
+                if(slobodno) slobodna.push(v)
+            }
+        })
+        return slobodna
     }
 
     async dodajVozilo(voziloDto: VoziloDto) {

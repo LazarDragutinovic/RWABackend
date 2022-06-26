@@ -43,7 +43,8 @@ export class Radnik {
 
     @Column({
         type:"simple-enum",
-        enum:Pozicija
+        enum:Pozicija,
+        nullable:true
     })
     pozicija: Pozicija
 

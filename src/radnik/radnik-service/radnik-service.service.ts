@@ -1,7 +1,7 @@
 import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RadnikDto } from 'src/dtos/radnik-dto';
-import { Radnik } from 'src/models/radnik';
+import { Pozicija, Radnik } from 'src/models/radnik';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -40,6 +40,8 @@ export class RadnikServiceService {
      
       async kreiraj(radnikDto: RadnikDto) {
         const noviRadnik = await this.radnikRepository.create(radnikDto);
+        noviRadnik.odobren = false;
+        noviRadnik.pozicija = Pozicija.MEHANICAR
         await this.radnikRepository.save(noviRadnik);
         return noviRadnik;
       }

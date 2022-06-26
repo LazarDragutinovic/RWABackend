@@ -45,10 +45,10 @@ export class KorisnikService {
         else throw new HttpException("Netacna stara lozinka.",HttpStatus.UNAUTHORIZED)
     }
 
-    async PretraziKorisnike(jmbg:number) {
+    async PretraziKorisnike(email:string) {
         
         let korisnici = await this.korisnikRepository.createQueryBuilder("korisnik")
-                        .where("korisnik.jmbg like :jmbg",{jmbg: `%${jmbg}%`})
+                        .where("korisnik.email like :email",{email: `%${email}%`})
                         .getMany();
         return korisnici;
     }

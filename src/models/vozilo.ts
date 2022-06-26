@@ -21,6 +21,12 @@ export class Vozilo {
     @Column()
     godiste: number;
 
+    @Column({
+        unique:true,
+        nullable: true
+    })
+    registracionaOznaka: string
+
     @Column()
     cenaPoDanu: number
 

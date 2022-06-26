@@ -20,10 +20,10 @@ export class KorisnikController {
     }
 
     @UseGuards(JwtAuthenticationGuardRadnik)
-    @Get("PretraziKorisnike/:jmbg")
-    pretraziKorisnike(@Param() {jmbg}) {
+    @Get("PretraziKorisnike/:email")
+    pretraziKorisnike(@Param() {email}) {
 
-        return this.korisnikService.PretraziKorisnike(jmbg);
+        return this.korisnikService.PretraziKorisnike(email);
 
     }
 }

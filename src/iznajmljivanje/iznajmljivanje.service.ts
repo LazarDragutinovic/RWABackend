@@ -18,12 +18,38 @@ export class IznajmljivanjeService {
 
     async preuzmiIznajmljivanjaKorisnika(id: number) {
         console.log(id)
-        let korisnik = await this.korisnikRepository.findOne({where:{id},relations:["iznajmljivanja"]});
+        let korisnik = await this.korisnikRepository.findOne({where:{id},relations:["iznajmljivanja"
+                                                        ,"iznajmljivanja.korisnik",
+                                                         "iznajmljivanja.vozilo",
+                                                         "iznajmljivanja.sluzbenik"
+                                                        ]});
         if(!korisnik) throw new HttpException("Nema tog korisnika",HttpStatus.NOT_FOUND);
         let iznajmljivanja = [];
-        korisnik.iznajmljivanja.forEach(izn=>{
-            iznajmljivanja.push(new IznajmljivanjeDto(izn));
-        })
+        
+        console.log(korisnik.iznajmljivanja.length)
+        for(let i = 0 ; i < korisnik.iznajmljivanja.length;i++){
+            let izn = korisnik.iznajmljivanja[i];
+            let vozilo = await this.voziloRepository.findOne({where:{id:izn.vozilo.id},relations:["voziloLogicko"]})
+            console.log(izn)
+            iznajmljivanja.push({
+                id: izn.id,
+                datum: izn.datum,
+                dana: izn.dana,
+                zavrseno: izn.zavrseno,
+                vozilo:vozilo.voziloLogicko.proizvodjac+" "+vozilo.voziloLogicko.model
+            });
+        }
+        // korisnik.iznajmljivanja.forEach(async(izn)=>{
+        //     //let vozilo = await this.voziloRepository.findOne({where:{id:izn.vozilo.id},relations:["voziloLogicko"]})
+        //     iznajmljivanja.push({
+        //         id: izn.id,
+        //         datum: izn.datum,
+        //         dana: izn.dana,
+        //         zavrseno: izn.zavrseno,
+        //         //vozilo:vozilo.voziloLogicko.proizvodjac+" "+vozilo.voziloLogicko.model
+        //     });
+        // })
+        console.log(iznajmljivanja)
         return iznajmljivanja;
     }
 
@@ -85,13 +111,21 @@ export class IznajmljivanjeService {
     }
 
     async zavrsiIznajmljivanje(id: number) {
-        let iznajmljivanje =await this.iznajmljivanjeRepository.findOne({where:{id}});
+        let iznajmljivanje =await this.iznajmljivanjeRepository.findOne({where:{id},relations:["vozilo"]});
 
         if(!iznajmljivanje) throw new HttpException("Nema tog iznajmljivanja",HttpStatus.NOT_FOUND);
-
+        let vozilo = await this.voziloRepository.findOne({where:{id:iznajmljivanje.vozilo.id},relations:["voziloLogicko"]});
         iznajmljivanje.zavrseno = true;
         this.iznajmljivanjeRepository.update(id,iznajmljivanje);
-        return new IznajmljivanjeDto(iznajmljivanje);
+        let rezultat = {
+            id: iznajmljivanje.id,
+            dana: iznajmljivanje.dana,
+            datum: iznajmljivanje.datum,
+            zavrseno:iznajmljivanje.zavrseno,
+            vozilo:vozilo.voziloLogicko.proizvodjac + " " + vozilo.voziloLogicko.model
+        }
+
+        return rezultat
     }
 
     async izbirisIznajmljivanje(id: number) {

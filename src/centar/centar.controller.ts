@@ -31,6 +31,11 @@ export class CentarController {
         return this.centarService.obrisiCentar(id);
     }
     
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("CentarRadnika/:id")
+    centarRadnika(@Param("id", ParseIntPipe)id: number) {
+        return this.centarService.centarRadnika(id)
+    }
 
 
 }

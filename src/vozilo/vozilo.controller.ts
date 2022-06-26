@@ -31,6 +31,12 @@ export class VoziloController {
     }
 
     @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("PretragaSlobodna/:proizvodjac/:grad")
+    pretragaSlobodna(@Param() params) {
+        return this.voziloService.pretraziSlobodneAutomobile(params.grad,params.proizvodjac);
+    }
+
+    @UseGuards(JwtAuthenticationGuardRadnik)
     @Post("Dodaj")
     dodajVozilo(@Body() voziloDto : VoziloDto){
         return this.voziloService.dodajVozilo(voziloDto);
