@@ -36,13 +36,13 @@ export class Vozilo {
     @OneToMany(()=>Popravka, (popravka)=>popravka.vozilo,{cascade:true,onDelete:"SET NULL"})
     popravke: Popravka[]
 
-    @OneToMany(type=>Like, like=>like.vozilo, { cascade:true,onDelete:"SET NULL"})
+    @OneToMany(type=>Like, like=>like.vozilo, { cascade:true,onDelete:"CASCADE"})
     likes: Like[]
 
     @ManyToOne(type=>Centar, centar=>centar.vozila)
     centar: Centar;
 
-    @OneToMany(type=>SlikaAutomobila, slikaAutomobila=>slikaAutomobila.vozilo, {onDelete:"CASCADE", cascade:true})
+    @OneToMany(type=>SlikaAutomobila, slikaAutomobila=>slikaAutomobila.vozilo, {onDelete:"CASCADE"})
     slike: SlikaAutomobila[]
 
     @OneToMany(type=>Iznajmljivanje, iznajmljivanje=>iznajmljivanje.vozilo)

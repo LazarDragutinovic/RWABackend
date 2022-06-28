@@ -24,4 +24,9 @@ export class VoziloLogickoService {
 
         await this.voziloLogickoRepository.delete(id);
     }
+
+    async preuzmiSva() {
+        let vozila = await this.voziloLogickoRepository.find()
+        return vozila
+    }
 }

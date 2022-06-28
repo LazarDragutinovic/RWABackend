@@ -19,7 +19,7 @@ export class VoziloDto {
     godiste: number;
 
     cenaPoDanu: number;
-
+    registracionaOznaka:string
     idLogickogVozila: number;
     slike: SlikaAutomobila[]
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Centar } from 'src/models/centar';
 import { RadiU } from 'src/models/radi-u';
 import { Radnik } from 'src/models/radnik';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class OdobriRasporediService {
@@ -19,11 +19,20 @@ export class OdobriRasporediService {
         await this.radnikRepositoty.update(id,radnik);
     }
 
+    async ZabraniNalog(id:number){
+        let radnik = await this.radnikRepositoty.findOne({where:{id}});
+        if(!radnik) throw new HttpException("Nema tog radnika.",HttpStatus.NOT_FOUND);
+        radnik.odobren = false;
+        await this.radnikRepositoty.update(id,radnik);
+    }
+
     async rasporedi(idr:number,idc:number) {
-        let predhodni = await this.radiURepository.findOne({where: {radnik:{id:idr},centar:{id:idc},datumDo:null}})
+       
+        let predhodni = await this.radiURepository.findOne({where: {radnik:{id:idr},datumDo:IsNull()}})
+       
         if(predhodni) {
             predhodni.datumDo = new Date(Date.now());
-            this.radiURepository.update(predhodni.id,predhodni)
+            await this.radiURepository.save(predhodni);
         }
         let noviPosao = new RadiU();
         let radnik = await this.radnikRepositoty.findOne({where:{id:idr}});
@@ -35,7 +44,7 @@ export class OdobriRasporediService {
         noviPosao.radnik = radnik; 
         noviPosao.datumOd = new Date(Date.now());
         noviPosao.datumDo = null;
-
-        return await this.radiURepository.save(noviPosao);
+        await this.radiURepository.save(noviPosao);
+        return noviPosao.centar
     }
 }

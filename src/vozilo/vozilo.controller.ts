@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuardRadnik from 'src/autentifikacija-radnik/jwtAuth.guard';
 import JwtAuthenticationGuard from 'src/autentifikacija/jwtauth.guard';
 import { VoziloDto } from 'src/dtos/vozilo.dto';
@@ -31,6 +31,12 @@ export class VoziloController {
     }
 
     @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("PretragaBezGrada/:proizvodjac")
+    pretragaBezGrada(@Param() params) {
+        return this.voziloService.pretraziAutomobileBezGrada(params.proizvodjac);
+    }
+
+    @UseGuards(JwtAuthenticationGuardRadnik)
     @Get("PretragaSlobodna/:proizvodjac/:grad")
     pretragaSlobodna(@Param() params) {
         return this.voziloService.pretraziSlobodneAutomobile(params.grad,params.proizvodjac);
@@ -42,6 +48,10 @@ export class VoziloController {
         return this.voziloService.dodajVozilo(voziloDto);
     }
     
-
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Delete("Obrisi/:id")
+    obrisiVozilo(@Param("id",ParseIntPipe) id: number) {
+        this.voziloService.obrisiVozilo(id)
+    }
     
 }

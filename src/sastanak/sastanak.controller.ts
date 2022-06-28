@@ -1,4 +1,4 @@
-import { Controller, Delete, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuardRadnik from 'src/autentifikacija-radnik/jwtAuth.guard';
 import { SastanakService } from './sastanak.service';
 
@@ -40,7 +40,24 @@ export class SastanakController {
     @UseGuards(JwtAuthenticationGuardRadnik)
     @Delete("OpozoviRadnika/:idr/:ids")
     opozoviRadnika(@Param("idr",ParseIntPipe) idr: number, @Param("ids",ParseIntPipe) ids: number) {
-        this.opozoviRadnika(idr,ids);
+        this.sastanakService.OpozoviRadnika(idr,ids);
     }
 
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("MojiSastanci/:id")
+    mojiSastanci(@Param("id",ParseIntPipe) id: number) {
+        return this.sastanakService.MojiSastanci(id);
+    }
+
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("SviSastanciUpravnika/:id")
+    sviSastanciUpravnika(@Param("id",ParseIntPipe) id: number){
+        return this.sastanakService.sviSastanciUpravnika(id)
+    }
+
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get("SviPozvaniNaSastanak/:id")
+    sviPozvaniNaSastanak(@Param("id",ParseIntPipe) id: number){
+        return this.sastanakService.sviPozvaniNaSastanak(id)
+    }
 }

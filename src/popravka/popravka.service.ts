@@ -21,9 +21,18 @@ export class PopravkaService {
         if(!centar) throw new HttpException("Nema tog centra",HttpStatus.NOT_FOUND);
         let popravke: Popravka[] = []
         for(let i = 0; i < centar.vozila.length;i++){
-            let novepopravke = (await this.popravkaRepository.find({where:{vozilo:{id:centar.vozila[i].id},obavljena:false}}))
+            let novepopravke = (await this.popravkaRepository.find({where:{vozilo:{id:centar.vozila[i].id}},relations:[
+                "vozilo",
+                "vozilo.voziloLogicko",
+                "mehanicar"
+            ]}))
             novepopravke.forEach(p=>popravke.push(p));
         }
+        popravke.sort((x,y)=>{
+            if(!x.obavljena && !y.obavljena) return 0;
+            if(!x.obavljena && y.obavljena) return -1;
+            return 1;
+        })
         return popravke;
     }
 
@@ -31,14 +40,19 @@ export class PopravkaService {
         let popravka=new Popravka();
         
         popravka.obavljena=false;
-        let vozilo = await this.voziloRepository.findOne({where:{id:idVozilo}});
+        let vozilo = await this.voziloRepository.findOne({where:{id:idVozilo},relations:['voziloLogicko']});
+        
         if(!vozilo) throw new HttpException("Nema tog vozila.",HttpStatus.NOT_FOUND);
         
         popravka.vozilo = vozilo;
-
+        popravka.cena = 0;
+        popravka.opis = ""
+        
         popravka = await this.popravkaRepository.save(popravka);
-        return new PopravkaDto(popravka);
+        popravka.mehanicar = null;
+        return popravka;
     }
+
 
     async preuzmiPopravku(idMehanicara: number, idPopravke: number){
         let mehanicar = await this.radnikRepository.findOne({where:{id:idMehanicara}});
@@ -51,7 +65,7 @@ export class PopravkaService {
 
         this.popravkaRepository.update(idPopravke, popravka);
 
-        return new PopravkaDto(popravka);
+        return popravka;
         
     }
 
@@ -61,9 +75,10 @@ export class PopravkaService {
         popravka.obavljena = true;
         popravka.opis = opis;
         popravka.cena = cena;
+        
 
         this.popravkaRepository.update(id,popravka);
 
-        return new PopravkaDto(popravka);
+        return popravka;
     }
 }

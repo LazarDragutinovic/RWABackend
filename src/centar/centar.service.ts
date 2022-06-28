@@ -3,15 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CentarDto } from 'src/dtos/centar.dto';
 import { Centar } from 'src/models/centar';
 import { RadiU } from 'src/models/radi-u';
-import { Repository } from 'typeorm';
+import { Vozilo } from 'src/models/vozilo';
+import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class CentarService {
 
 
     constructor(@InjectRepository(Centar) private centarRepository: Repository<Centar>,
-                @InjectRepository(RadiU) private radiURepository: Repository<RadiU>
-    ){}
+                @InjectRepository(RadiU) private radiURepository: Repository<RadiU>,
+                @InjectRepository(Vozilo) private voziloRepository: Repository<Vozilo>
+                ){}
+
+    async postaviCentarVozila(idc: number, idv: number){
+        let centar = await this.centarRepository.findOne({where:{id:idc}});
+        if(!centar) throw new HttpException("Nema tog centra",HttpStatus.NOT_FOUND);
+        let vozilo = await this.voziloRepository.findOne({where:{id:idv}})
+        if(!vozilo) throw new HttpException("Nema tog vozila.",HttpStatus.NOT_FOUND);
+        vozilo.centar = centar;
+        await this.voziloRepository.update(vozilo.id, vozilo);
+    }
 
     async preuzmiCentre() {          
         return await this.centarRepository.find({relations:["slika"]});
@@ -35,8 +46,8 @@ export class CentarService {
     }
 
     async centarRadnika(id:number) {
-        let posao = await this.radiURepository.findOne({where:{radnik:{id},datumOd:null},relations:["centar"]})
-        
-        return posao.centar;
+        let predhodni = await this.radiURepository.findOne({where: {radnik:{id:id},datumDo:IsNull()},relations:["centar"]})
+        if(!predhodni) return null
+        return predhodni.centar;
     }
 }

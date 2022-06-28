@@ -50,13 +50,28 @@ export class SastanakService {
         let radnik  = await this.radnikRepository.findOne({where: {id}});
         if(!radnik)  throw new HttpException("Nema tog radnika",HttpStatus.NOT_FOUND);
         sastanak.pozvani.push(radnik);
-        await this.sastanakRepository.update(ids, sastanak);
+        await this.sastanakRepository.save(sastanak);
+    }
+
+    async sviPozvaniNaSastanak(id: number){
+        let pozvani = await this.radnikRepository.find({where:{sastanci:{id}}})
+        return pozvani;
+    }
+
+    async sviSastanciUpravnika(id: number) {
+        let sastanci = await this.sastanakRepository.find({where:{zakazao:{id}}})
+        return sastanci;
     }
 
     async OpozoviRadnika(id: number, ids: number) {
         let sastanak = await this.sastanakRepository.findOne({where:{id:ids},relations:["pozvani"]})
         if(!sastanak) throw new HttpException("Nema tog sastanka",HttpStatus.NOT_FOUND);
         sastanak.pozvani = sastanak.pozvani.filter(radnik=>radnik.id !== id);
-        await this.sastanakRepository.update(ids, sastanak)
+        await this.sastanakRepository.save(sastanak)
+    }
+
+    async MojiSastanci(id: number) {
+        let sastanci = await this.sastanakRepository.find({where:{pozvani:{id}},relations:["zakazao"]})
+        return sastanci
     }
 }

@@ -2,7 +2,7 @@ import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RadnikDto } from 'src/dtos/radnik-dto';
 import { Pozicija, Radnik } from 'src/models/radnik';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class RadnikServiceService {
@@ -52,5 +52,17 @@ export class RadnikServiceService {
             return radnik;
         }
         throw new HttpException('Korisnik sa ovim idem ne postoji', HttpStatus.NOT_FOUND);
+    }
+
+     pretraziRadnike(email:string) {
+        let radnici =  this.radnikRepository.find({where:{email: Like(`%${email}%`)}});
+        
+        return radnici
+    }
+
+    async postaviPoziciju(id: number, pozicija: string) {
+        let radnik = await this.radnikRepository.findOne({where:{id}});
+        radnik.pozicija = <Pozicija>pozicija
+        await this.radnikRepository.save(radnik)
     }
 }

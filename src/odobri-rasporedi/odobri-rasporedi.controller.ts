@@ -12,9 +12,16 @@ export class OdobriRasporediController {
     odobriNalog(@Param("id",ParseIntPipe) id: number) {
         return this.odobriRaseporediService.OdobriNalog(id); 
     }
+    
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Put("ZabraniNalog/:id")
+    ZabraniNalog(@Param("id",ParseIntPipe) id: number) {
+        return this.odobriRaseporediService.ZabraniNalog(id); 
+    }
+    
 
     @UseGuards(JwtAuthenticationGuardRadnik)
-    @Post("Rasporedi/:idr/:idc")
+    @Put("Rasporedi/:idr/:idc")
     rasporedi(@Param("idr",ParseIntPipe) idr: number, @Param("idc",ParseIntPipe) idc:number) {
         return this.odobriRaseporediService.rasporedi(idr, idc);
     }

@@ -36,6 +36,11 @@ export class CentarController {
     centarRadnika(@Param("id", ParseIntPipe)id: number) {
         return this.centarService.centarRadnika(id)
     }
-
+    
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Put("PostaviCentarVozila/:idc/:idv")
+    postaviCentarVozila(@Param("idc",ParseIntPipe) idc:number, @Param("idv",ParseIntPipe) idv:number) {
+        return this.centarService.postaviCentarVozila(idc,idv)
+    }
 
 }

@@ -36,7 +36,8 @@ export class IznajmljivanjeService {
                 datum: izn.datum,
                 dana: izn.dana,
                 zavrseno: izn.zavrseno,
-                vozilo:vozilo.voziloLogicko.proizvodjac+" "+vozilo.voziloLogicko.model
+                vozilo:vozilo.voziloLogicko.proizvodjac+" "+vozilo.voziloLogicko.model,
+                cenaUkupna: vozilo.cenaPoDanu * izn.dana
             });
         }
         // korisnik.iznajmljivanja.forEach(async(izn)=>{

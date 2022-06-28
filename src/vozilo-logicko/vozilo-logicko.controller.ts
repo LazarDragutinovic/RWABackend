@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuardRadnik from 'src/autentifikacija-radnik/jwtAuth.guard';
 import { VoziloLogickoDto } from 'src/dtos/voziloLogicko.dto';
 import { VoziloLogickoService } from './vozilo-logicko.service';
@@ -15,7 +15,11 @@ export class VoziloLogickoController {
     dodajVozilo(@Body() voziloLogickoDto: VoziloLogickoDto) {
         return this.voziloLogickoService.dodajVoziloLogicko(voziloLogickoDto)
     }
-
+    @UseGuards(JwtAuthenticationGuardRadnik)
+    @Get()
+    preuzmiSva(){
+        return this.voziloLogickoService.preuzmiSva();
+    }
     @UseGuards(JwtAuthenticationGuardRadnik)
     @Delete("Izbrisi/:id")
     izbrisiVozilo(@Param("id",ParseIntPipe) id: number) {
