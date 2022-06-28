@@ -20,6 +20,7 @@ export class VoziloLogickoService {
 
     async obrisiVoziloLogicko(id: number) {
         let vozilo = await this.voziloLogickoRepository.findOne({where: {id}});
+        
         if(vozilo === null) throw new HttpException("Nema tog vozila", HttpStatus.NOT_FOUND);
 
         await this.voziloLogickoRepository.delete(id);

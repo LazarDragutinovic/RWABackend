@@ -30,7 +30,7 @@ export class Vozilo {
     @Column()
     cenaPoDanu: number
 
-    @ManyToOne(()=>VoziloLogicko,(voziloLogicko)=>voziloLogicko.vozila)
+    @ManyToOne(()=>VoziloLogicko,(voziloLogicko)=>voziloLogicko.vozila,{ cascade:true,onDelete:"CASCADE"})
     voziloLogicko: VoziloLogicko
 
     @OneToMany(()=>Popravka, (popravka)=>popravka.vozilo,{cascade:true,onDelete:"SET NULL"})

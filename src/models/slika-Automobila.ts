@@ -10,6 +10,6 @@ export class SlikaAutomobila {
     @Column()
     url: string;
 
-    @ManyToOne(type=>Vozilo, vozilo=>vozilo.slike)
+    @ManyToOne(type=>Vozilo, vozilo=>vozilo.slike,{ cascade: true, onDelete: 'CASCADE' })
     vozilo: Vozilo
 }

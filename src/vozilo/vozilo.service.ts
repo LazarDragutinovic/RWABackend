@@ -75,6 +75,9 @@ export class VoziloService {
         if(voziloLogicko === null) {
             throw new HttpException("Nema tog logickog vozila.", HttpStatus.NOT_FOUND);
         }
+        let voziloSaIstomOznakom = await this.voziloRepository.findOne({where:{registracionaOznaka:voziloDto.registracionaOznaka}})
+        
+        if(voziloSaIstomOznakom) throw new HttpException("Vec postoji sa istom oznakom",HttpStatus.UNAUTHORIZED);
         vozilo = await this.voziloRepository.save(vozilo);
         vozilo.voziloLogicko = voziloLogicko;
         let slika = this.slikeRepository.create(vozilo.slike[0]);

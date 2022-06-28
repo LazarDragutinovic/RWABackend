@@ -20,6 +20,6 @@ export class VoziloLogicko {
     tip: string;
 
 
-    @OneToMany(()=>Vozilo, (vozilo)=>vozilo.voziloLogicko,{cascade:true,onDelete:"CASCADE"})
+    @OneToMany(()=>Vozilo, (vozilo)=>vozilo.voziloLogicko)
     vozila: Vozilo[]
 }
