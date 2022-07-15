@@ -26,30 +26,38 @@ export class VoziloService {
 
     async pretraziAutomobile(grad: string, proizvodjac: string,strana: number) {
         if(grad == "1") grad = ""
-        let vozila = await this.voziloRepository.find({where:{voziloLogicko: {proizvodjac: Like(`%${proizvodjac}%`)} , centar: {grad:Like(`%${grad}%`)}},relations:["voziloLogicko","slike","centar"]});
-        // let vozila1= await this.voziloLogickoRepository.createQueryBuilder("vozilo")
-        //                         .where("vozilo.voziloLogicko.proizvodjac like :proizvodjac and vozilo.centar.grad like :grad", {proizvodjac: `%${proizvodjac}%`, grad: `%${grad}%`})
-        //                         .getMany()
+              
+        let vozila = await this.voziloRepository.find({relations:["voziloLogicko","slike","centar"]});
+        let taVozila = [];
+        vozila.forEach(v=>{
+            
+            if(v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()) && v.centar?.grad?.toLowerCase().includes(grad.toLowerCase()))
+                taVozila.push(v);
+        })
         
-        return vozila;
+        return taVozila;
     }
 
     async pretraziAutomobileBezGrada(proizvodjac: string) {
         
-        let vozila = await this.voziloRepository.find({where:{voziloLogicko: {proizvodjac: Like(`%${proizvodjac}%`)}},relations:["voziloLogicko","slike","centar"]});
+        let vozila = await this.voziloRepository.find({relations:["voziloLogicko","slike","centar"]});
         // let vozila1= await this.voziloLogickoRepository.createQueryBuilder("vozilo")
         //                         .where("vozilo.voziloLogicko.proizvodjac like :proizvodjac and vozilo.centar.grad like :grad", {proizvodjac: `%${proizvodjac}%`, grad: `%${grad}%`})
         //                         .getMany()
-        
+        vozila = vozila.filter(v=>v.centar && v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()));
         return vozila;
     }
 
     async pretraziSlobodneAutomobile(grad: string,proizvodjac:string) {
         if(grad=="1") grad = ""
-        let vozila = await this.voziloRepository.find({where:{voziloLogicko:{proizvodjac: Like(`%${proizvodjac}%`)},centar: {grad:Like(`%${grad}%`)}},relations:["voziloLogicko","slike","centar","iznajmljivanja"]})
+        let vozila = await this.voziloRepository.find({relations:["voziloLogicko","slike","centar","iznajmljivanja","popravke"]})
         let slobodna:Vozilo[] = []
+        
         vozila.forEach(v=>{
-            if(v.iznajmljivanja.length ==0) slobodna.push(v)
+            if(v.popravke.filter(p=>p.obavljena == false).length != 0) {}
+            
+            else if(v.iznajmljivanja.length ==0 && v.centar)
+                if(v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()) && v.centar.grad.toLowerCase().includes(grad.toLowerCase())) slobodna.push(v)
             else {
                 let slobodno = true;
                 for(let i = 0; i< v.iznajmljivanja.length;i++){
@@ -58,11 +66,11 @@ export class VoziloService {
                         break;
                     }
                 }
-                if(slobodno) slobodna.push(v)
+                if(slobodno && v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()) && v.centar.grad.toLowerCase().includes(grad.toLowerCase())) slobodna.push(v)
             }
         })
 
-        console.log(slobodna)
+        
         return slobodna
     }
 

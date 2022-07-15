@@ -25,4 +25,6 @@ export class VoziloLogickoController {
     izbrisiVozilo(@Param("id",ParseIntPipe) id: number) {
         this.voziloLogickoService.obrisiVoziloLogicko(id);
     }
+
+    
 }
