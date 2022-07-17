@@ -44,7 +44,7 @@ export class VoziloService {
         // let vozila1= await this.voziloLogickoRepository.createQueryBuilder("vozilo")
         //                         .where("vozilo.voziloLogicko.proizvodjac like :proizvodjac and vozilo.centar.grad like :grad", {proizvodjac: `%${proizvodjac}%`, grad: `%${grad}%`})
         //                         .getMany()
-        vozila = vozila.filter(v=>v.centar && v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()));
+        vozila = vozila.filter(v=>v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()));
         return vozila;
     }
 
@@ -53,22 +53,26 @@ export class VoziloService {
         let vozila = await this.voziloRepository.find({relations:["voziloLogicko","slike","centar","iznajmljivanja","popravke"]})
         let slobodna:Vozilo[] = []
         
-        vozila.forEach(v=>{
-            if(v.popravke.filter(p=>p.obavljena == false).length != 0) {}
-            
-            else if(v.iznajmljivanja.length ==0 && v.centar)
-                if(v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()) && v.centar.grad.toLowerCase().includes(grad.toLowerCase())) slobodna.push(v)
-            else {
-                let slobodno = true;
-                for(let i = 0; i< v.iznajmljivanja.length;i++){
-                    if(!v.iznajmljivanja[i].zavrseno) {
-                        slobodno = false;
-                        break;
-                    }
-                }
-                if(slobodno && v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()) && v.centar.grad.toLowerCase().includes(grad.toLowerCase())) slobodna.push(v)
+        slobodna = vozila.filter(v=>v.voziloLogicko.proizvodjac.toLowerCase().includes(proizvodjac.toLowerCase()));
+        console.log(slobodna)
+        slobodna = slobodna.filter(v=>v.centar != null && v.centar.grad.toLowerCase().includes(grad.toLowerCase()));
+        console.log(slobodna)
+        slobodna = slobodna.filter(v=>{
+            for(let i = 0; i < v.iznajmljivanja.length;i++) {
+                if(!v.iznajmljivanja[i].zavrseno) return false;
             }
+            return true;
+        });
+        console.log(slobodna)
+
+        slobodna = slobodna.filter(v=>{
+            console.log(v.popravke)
+            for(let i = 0 ; i < v.popravke.length; i++) {
+                if(!v.popravke[i].obavljena) return false;
+            }
+            return true;
         })
+        console.log(slobodna)
 
         
         return slobodna
