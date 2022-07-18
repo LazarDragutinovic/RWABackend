@@ -16,7 +16,7 @@ import { ConnectionOptions } from "typeorm";
 
 export const typeOrmConnectionOptions : ConnectionOptions = {
     type:"postgres",
-    host:'localhost',
+    host:'host.docker.internal',
     port: 5432,
     username:"postgres",
     password:"lozinka",
